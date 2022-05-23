@@ -4,12 +4,19 @@
   "description": "",
   "main": "sls.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "NODE_ENV=development node app.js"
+    "start": "PORT=9000 NODE_ENV=prod node app.js",
+    "dev": "PORT=9999 NODE_ENV=dev nodemon app.js ",
+    "run-client": "cd client && PORT=3006 yarn start",
+    "build-client": "rm -rf statics/** && cd client && npm run build",
+    "deploy": "npm run build-client && sls deploy"
   },
   "author": "yugasun",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }

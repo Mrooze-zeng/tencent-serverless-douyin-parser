@@ -1,11 +1,19 @@
 const express = require("express");
 const path = require("path");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 
 // Routes
-app.get(`/`, (req, res) => {
-  res.sendFile(path.join(__dirname, "statics/index.html"));
-});
+if (process.env.NODE_ENV === "prod") {
+  app.use("/", express.static(path.join(__dirname, "statics")));
+} else {
+  app.use((req, res, next) => {
+    if (req.url === "/" || path.extname(req.url)) {
+      app.use("/", createProxyMiddleware({ target: "http://127.0.0.1:3006" }));
+    }
+    next();
+  });
+}
 
 app.get("/user", (req, res) => {
   res.send([
@@ -39,6 +47,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send("Internal Serverless Error");
 });
 
-app.listen(9000, () => {
-  console.log(`Server start on http://localhost:9000`);
+app.listen(process.env.PORT || 9000, () => {
+  console.log(`Server start on ${process.env.PORT || 9000}`);
 });

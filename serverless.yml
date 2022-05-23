@@ -5,9 +5,10 @@ inputs:
     src: ./
     exclude:
       - .env
+      - client
   faas:
     framework: express
-    name: '${name}'
+    name: "${name}"
     runtime: Nodejs12.16
     eip: false
     timeout: 3
@@ -15,8 +16,8 @@ inputs:
     tags: []
     environments: []
     layers:
-      - name: '${output:${stage}:${app}:douyin-demo-layer.name}'
-        version: '${output:${stage}:${app}:douyin-demo-layer.version}'
+      - name: "${output:${stage}:${app}:douyin-demo-layer.name}"
+        version: "${output:${stage}:${app}:douyin-demo-layer.version}"
   apigw:
     protocols:
       - http
@@ -35,6 +36,6 @@ inputs:
         isDefaultMapping: false
   region: ap-guangzhou
   isAutoCiDeploy: false
-org: '1252911770'
+org: "1252911770"
 app: douyin-demo
 stage: dev
