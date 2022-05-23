@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { createProxyMiddleware } = require("http-proxy-middleware");
+// const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 
 // Routes
@@ -39,6 +39,13 @@ app.get("/404", (req, res) => {
 
 app.get("/500", (req, res) => {
   res.status(500).send("Server Error");
+});
+
+app.get("/verison", (req, res) => {
+  res.send({
+    version: process.version,
+    path: process.env.PATH,
+  });
 });
 
 // Error handler

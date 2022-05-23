@@ -9,10 +9,10 @@ inputs:
   faas:
     framework: express
     name: "${name}"
-    runtime: Nodejs12.16
+    runtime: Nodejs16.13
     eip: false
     timeout: 3
-    memorySize: 512
+    memorySize: 1024
     tags: []
     environments: []
     layers:

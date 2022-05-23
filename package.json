@@ -1,5 +1,5 @@
 {
-  "name": "express-demo",
+  "name": "douyin-parser",
   "version": "1.0.0",
   "description": "",
   "main": "sls.js",
@@ -10,13 +10,18 @@
     "build-client": "rm -rf statics/** && cd client && npm run build",
     "deploy": "npm run build-client && sls deploy"
   },
-  "author": "yugasun",
+  "author": "Mrooze",
   "license": "MIT",
+  "engines": {
+    "node": "16"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "http-proxy-middleware": "^2.0.6"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.0",
+    "@babel/node": "^7.17.10",
     "nodemon": "^2.0.16"
   }
 }
