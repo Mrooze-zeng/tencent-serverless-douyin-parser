@@ -1,0 +1,13 @@
+org: '1252911770'
+app: douyin-demo
+stage: dev
+component: layer
+name: douyin-demo-layer
+inputs:
+  name: douyin-demo-layer
+  region: ap-guangzhou
+  src:
+    src: ../node_modules
+    targetDir: /node_modules
+  runtimes:
+    - Nodejs12.16
