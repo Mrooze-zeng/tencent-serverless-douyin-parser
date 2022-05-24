@@ -28,6 +28,7 @@ inputs:
       - domain: tools.v-hiker.cn
         certId: wH24Kimq
         protocols:
+          - http
           - https
         pathMap:
           - path: /

@@ -1,7 +1,13 @@
-const express = require("express");
-const path = require("path");
-// const { createProxyMiddleware } = require("http-proxy-middleware");
+import express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+import Routes from "./routes/index.mjs";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 const app = express();
+const routes = new Routes(app);
 
 // Routes
 if (process.env.NODE_ENV === "prod") {
@@ -15,31 +21,7 @@ if (process.env.NODE_ENV === "prod") {
   });
 }
 
-app.get("/user", (req, res) => {
-  res.send([
-    {
-      title: "serverless framework",
-      link: "https://serverless.com",
-    },
-  ]);
-});
-
-app.get("/user/:id", (req, res) => {
-  const id = req.params.id;
-  res.send({
-    id: id,
-    title: "serverless framework",
-    link: "https://serverless.com",
-  });
-});
-
-app.get("/404", (req, res) => {
-  res.status(404).send("Not found");
-});
-
-app.get("/500", (req, res) => {
-  res.status(500).send("Server Error");
-});
+routes.setupRoute(app);
 
 app.get("/verison", (req, res) => {
   res.send({

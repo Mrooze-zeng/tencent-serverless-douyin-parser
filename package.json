@@ -4,20 +4,22 @@
   "description": "",
   "main": "sls.js",
   "scripts": {
-    "start": "PORT=9000 NODE_ENV=prod node app.js",
-    "dev": "PORT=9999 NODE_ENV=dev nodemon app.js ",
+    "start": "PORT=9000 NODE_ENV=prod node app.mjs",
+    "dev": "PORT=9999 NODE_ENV=dev nodemon app.mjs ",
     "run-client": "cd client && PORT=3006 yarn start",
     "build-client": "rm -rf statics/** && cd client && npm run build",
     "deploy": "npm run build-client && sls deploy"
   },
   "author": "Mrooze",
   "license": "MIT",
+  "type": "module",
   "engines": {
     "node": "16"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "http-proxy-middleware": "^2.0.6"
+    "http-proxy-middleware": "^2.0.6",
+    "node-fetch": "^3.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.18.0",

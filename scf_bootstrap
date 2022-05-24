@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-npm run start
+# export PATH=/var/lang/node12/bin/node:$PATH
+
+export PORT=9000 
+export NODE_ENV=prod 
+
+/var/lang/node16/bin/node app.mjs
