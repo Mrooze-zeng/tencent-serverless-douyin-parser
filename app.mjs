@@ -21,6 +21,9 @@ if (process.env.NODE_ENV === "prod") {
   });
 }
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 routes.setupRoute(app);
 
 app.get("/verison", (req, res) => {

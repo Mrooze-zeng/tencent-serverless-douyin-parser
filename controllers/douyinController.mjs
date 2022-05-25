@@ -1,3 +1,4 @@
+import fs from "fs";
 import fetch from "node-fetch";
 
 export default class DouyinController {
@@ -6,7 +7,7 @@ export default class DouyinController {
   }
   _getUrlFromText(text = "") {
     const regex = /https:\/\/v\.douyin\.com\/[a-z0-9]+\//gi;
-    const url = text?.match(regex)[0];
+    const url = text?.match(regex) && text?.match(regex)[0];
     if (url) {
       return url;
     }
@@ -37,11 +38,24 @@ export default class DouyinController {
       const url = this._getUrlFromText(text);
       const videoId = await this._getVideoId(url);
       const videoInfo = await this._getVideoInfo(videoId);
-      console.log(videoInfo);
       res.send({
         type: "success",
         message: videoInfo,
       });
+    } catch (e) {
+      res.send({
+        type: "failure",
+        message: e.message,
+      });
+    }
+  }
+  async download(req, res) {
+    const { url } = { ...req.query, ...req.body };
+    try {
+      const response = await fetch(url);
+      const buffer = await response.arrayBuffer();
+      res.set("Content-Type", "application/octet-stream");
+      res.end(Buffer.from(buffer));
     } catch (e) {
       res.send({
         type: "failure",

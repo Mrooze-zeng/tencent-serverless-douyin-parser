@@ -1,15 +1,18 @@
+import path from "path";
 import { DouyinController } from "../controllers/index.mjs";
 
 export default class Routes {
-  constructor() {}
+  constructor({ prefix = "/api" } = {}) {
+    this.prefix = prefix;
+  }
   setupRoute(app) {
     const routeMap = this.routeMap();
-    Object.keys(routeMap).forEach((path) => {
-      routeMap[path].forEach((router) => {
-        app[router.type.toLocaleLowerCase()](
-          path,
-          ...(router.middlewares || []),
-          router.handler,
+    Object.keys(routeMap).forEach((router) => {
+      routeMap[router].forEach((method) => {
+        app[method.type.toLocaleLowerCase()](
+          path.join("/", this.prefix, router),
+          ...(method.middlewares || []),
+          method.handler,
         );
       });
     });
@@ -23,6 +26,9 @@ export default class Routes {
           handler: douyinController.parse,
           middlewares: [],
         },
+      ],
+      "/download": [
+        { type: "POST", handler: douyinController.download, middlewares: [] },
       ],
     };
   }
