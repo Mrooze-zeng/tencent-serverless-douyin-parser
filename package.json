@@ -19,6 +19,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "http-proxy-middleware": "^2.0.6",
+    "lowdb": "^3.0.0",
     "node-fetch": "^3.2.4"
   },
   "devDependencies": {

@@ -29,7 +29,6 @@ routes.setupRoute(app);
 app.get("/verison", (req, res) => {
   res.send({
     version: process.version,
-    path: process.env.PATH,
   });
 });
 

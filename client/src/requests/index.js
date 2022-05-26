@@ -1,10 +1,16 @@
+import FringerPrint from "@fingerprintjs/fingerprintjs";
 import * as Api from "../apis";
 
 export const commonPost = async (url = "", params = {}) => {
+  const fp = await FringerPrint.load();
+  const { visitorId } = await fp.get();
   return await fetch(url, {
     method: "POST",
-    headers: new Headers({ "Content-Type": "application/json" }),
-    body: JSON.stringify(params),
+    headers: new Headers({
+      "Content-Type": "application/json",
+      "Visitor-Id": visitorId,
+    }),
+    body: JSON.stringify({ ...params }),
   });
 };
 

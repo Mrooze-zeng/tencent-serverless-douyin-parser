@@ -60,7 +60,7 @@ const App = () => {
             >
               重置
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" disabled={videos.length}>
               获取
             </Button>
           </Form.Group>
@@ -103,12 +103,10 @@ const App = () => {
             );
           })}
       </div>
-      <footer className="position-absolute bottom-0 text-center w-100">
-        <p>
-          <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer">
-            ICP主体备案号:粤ICP备17043808号
-          </a>
-        </p>
+      <footer className="position-absolute bottom-0 text-center w-100 mb-1">
+        <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer">
+          ICP主体备案号:粤ICP备17043808号
+        </a>
       </footer>
     </>
   );

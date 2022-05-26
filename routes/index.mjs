@@ -27,8 +27,12 @@ export default class Routes {
           middlewares: [],
         },
       ],
-      "/download": [
-        { type: "POST", handler: douyinController.download, middlewares: [] },
+      "/download": [{ type: "POST", handler: douyinController.download }],
+      "/log": [
+        {
+          type: "GET",
+          handler: douyinController.log,
+        },
       ],
     };
   }
