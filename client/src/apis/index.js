@@ -1,2 +1,2 @@
-export const PARSER = "/api/parser";
-export const DONWLOAD = "/api/download";
+export const PARSER = "api/douyin/parser";
+export const DONWLOAD = "api/douyin/download";

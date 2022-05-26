@@ -2,12 +2,11 @@ import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import Routes from "./routes/index.mjs";
+import Router, { douyinRouter } from "./routes/index.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-const routes = new Routes(app);
 
 // Routes
 if (process.env.NODE_ENV === "prod") {
@@ -24,7 +23,7 @@ if (process.env.NODE_ENV === "prod") {
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-routes.setupRoute(app);
+app.use("/api", new Router("/douyin", douyinRouter));
 
 app.get("/verison", (req, res) => {
   res.send({
@@ -34,7 +33,6 @@ app.get("/verison", (req, res) => {
 
 // Error handler
 app.use(function (err, req, res, next) {
-  console.error(err);
   res.status(500).send("Internal Serverless Error");
 });
 
