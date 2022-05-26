@@ -1,99 +1,35 @@
 import { useState } from "react";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { useFetchBufferUrl, useGetVideos } from "./hooks";
+import { copyTextToClipboard, downloadUrl } from "./utils";
 
 const App = () => {
-  const [videoAddresses, setVideoAddresses] = useState([]);
   const [modalShow, setModalShow] = useState(false);
+  const [videos, getVideos, setVideos] = useGetVideos("");
+  const [url, getUrl, setUrl] = useFetchBufferUrl("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     setModalShow(true);
-    setVideoAddresses([]);
-    const text = e.target.text.value;
-    const res = await fetch("/api/parser", {
-      method: "POST",
-      headers: new Headers({ "Content-Type": "application/json" }),
-      body: JSON.stringify({ text }),
-    });
-    const data = await res.json();
+    await getVideos(e.target.text.value);
     setModalShow(false);
-    if (data.type === "success") {
-      setVideoAddresses(data.message?.aweme_detail?.video?.play_addr?.url_list);
-    } else {
-      alert(data.message);
-    }
   };
   const handleReset = () => {
-    setVideoAddresses([]);
+    setVideos([]);
   };
   const handleClose = () => {
     setModalShow(false);
   };
-  const copyTextToClipboard = (text = "") => {
-    return new Promise((resolve, reject) => {
-      if (!navigator.clipboard) {
-        const textArea = document.createElement("textarea");
-        let message = "";
-        textArea.value = text;
 
-        // Avoid scrolling to bottom
-        textArea.style.top = "0";
-        textArea.style.left = "0";
-        textArea.style.position = "fixed";
-
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-          var successful = document.execCommand("copy");
-          var msg = successful ? "successful" : "unsuccessful";
-          message = "Fallback: Copying text command was " + msg;
-        } catch (err) {
-          message = "Fallback: Oops, unable to copy " + err;
-        }
-        textArea.remove();
-        return resolve(message);
-      } else {
-        navigator.clipboard.writeText(text).then(
-          function () {
-            resolve("Async: Copying to clipboard was successful!");
-          },
-          function (err) {
-            resolve("Async: Could not copy text: " + err);
-          },
-        );
-      }
-    });
-  };
   const handleCopy = async (text = "") => {
     const message = await copyTextToClipboard(text);
     alert(message);
   };
-  const createLink = (blobUrl = "") => {
-    const randomFilename = Math.random().toString(36).slice(2);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = blobUrl;
-    a.download = `${randomFilename}.mp4`;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(blobUrl);
-    a.remove();
-  };
+
   const handleDownload = async (url = "") => {
-    const response = await fetch("/api/download", {
-      method: "POST",
-      body: JSON.stringify({ url: url }),
-      headers: new Headers({ "Content-Type": "application/json" }),
-    });
-    const buffer = await response.blob();
-    if (buffer.type === "application/octet-stream") {
-      const videoBuffer = new Blob([buffer], { type: "video/mp4" });
-      buffer && createLink(URL.createObjectURL(videoBuffer));
-    } else {
-      const text = await buffer.text();
-      const res = JSON.parse(text);
-      alert(res.message);
-    }
+    setModalShow(true);
+    const link = await getUrl(url);
+    downloadUrl(link);
+    setModalShow(false);
   };
   return (
     <>
@@ -137,15 +73,15 @@ const App = () => {
         backdrop="static"
         keyboard={false}
       >
-        <Modal.Body>
+        <Modal.Body className="text-center">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </Modal.Body>
       </Modal>
       <div className="container mt-5">
-        {videoAddresses &&
-          videoAddresses.map((address, index) => {
+        {videos &&
+          videos.map((address, index) => {
             return (
               <div key={index}>
                 <Button
@@ -167,8 +103,8 @@ const App = () => {
             );
           })}
       </div>
-      <footer className="position-absolute top-100 start-50 translate-middle">
-        <p className="mb-5">
+      <footer className="position-absolute bottom-0 text-center w-100">
+        <p>
           <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer">
             ICP主体备案号:粤ICP备17043808号
           </a>
