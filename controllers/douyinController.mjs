@@ -31,9 +31,7 @@ export default class DouyinController extends BaseController {
   async _getVideoInfo(id = "") {
     const url = `https://www.iesdouyin.com/aweme/v1/web/aweme/detail/?aweme_id=${id}`;
     const response = await fetch(url);
-    console.log(url);
     const json = await response.json();
-
     return json;
   }
   async parse(req, res) {
