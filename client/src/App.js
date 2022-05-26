@@ -6,7 +6,7 @@ import { copyTextToClipboard, downloadUrl } from "./utils";
 const App = () => {
   const [modalShow, setModalShow] = useState(false);
   const [videos, getVideos, setVideos] = useGetVideos("");
-  const [url, getUrl, setUrl] = useFetchBufferUrl("");
+  const [buffer, getBuffer, setBuffer] = useFetchBufferUrl("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     setModalShow(true);
@@ -27,8 +27,12 @@ const App = () => {
 
   const handleDownload = async (url = "") => {
     setModalShow(true);
-    const link = await getUrl(url);
-    downloadUrl(link);
+    try {
+      const buffer = await getBuffer(url);
+      downloadUrl(buffer);
+    } catch (e) {
+      alert(e.message);
+    }
     setModalShow(false);
   };
   return (

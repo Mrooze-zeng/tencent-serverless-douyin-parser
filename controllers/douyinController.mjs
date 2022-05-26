@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import fetch, { Headers } from "node-fetch";
 import BaseController from "./baseController.mjs";
 
 export default class DouyinController extends BaseController {
@@ -8,6 +8,9 @@ export default class DouyinController extends BaseController {
     this.parse = this.parse.bind(this);
     this.download = this.download.bind(this);
     this.log = this.log.bind(this);
+    this._commonFetch = this._commonFetch.bind(this);
+    this._getUrlFromText = this._getUrlFromText.bind(this);
+    this._getVideoId = this._getVideoId.bind(this);
   }
   _getUrlFromText(text = "") {
     const regex = /https:\/\/v\.douyin\.com\/[a-z0-9]+\//gi;
@@ -17,9 +20,17 @@ export default class DouyinController extends BaseController {
     }
     throw new Error("Invalid URL");
   }
+  async _commonFetch(url = "") {
+    return await fetch(url, {
+      headers: new Headers({
+        "User-Agent":
+          " Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4",
+      }),
+    });
+  }
   async _getVideoId(originUrl = "") {
     const regex = /video\/(\d+)\??/;
-    const response = await fetch(originUrl);
+    const response = await this._commonFetch(originUrl);
     const url = response?.url;
     const idMatch = url?.match(regex) || [];
     const videoId = idMatch[1];
@@ -30,7 +41,7 @@ export default class DouyinController extends BaseController {
   }
   async _getVideoInfo(id = "") {
     const url = `https://www.iesdouyin.com/aweme/v1/web/aweme/detail/?aweme_id=${id}`;
-    const response = await fetch(url);
+    const response = await this._commonFetch(url);
     const json = await response.json();
     return json;
   }
@@ -64,7 +75,7 @@ export default class DouyinController extends BaseController {
   async download(req, res) {
     const { url } = { ...req.query, ...req.body };
     try {
-      const response = await fetch(url);
+      const response = await this._commonFetch(url);
       const buffer = await response.arrayBuffer();
       res.set("Content-Type", "application/octet-stream");
       res.end(Buffer.from(buffer));

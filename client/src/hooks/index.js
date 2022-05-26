@@ -17,17 +17,14 @@ export const useGetVideos = (defaultText = "") => {
 };
 
 export const useFetchBufferUrl = (defaultUrl = "") => {
-  const [url, setUrl] = useState("");
-  const getUrl = async (url = "") => {
-    try {
-      const bufferUrl = await fetchBufferUrl(url);
-      setUrl(bufferUrl);
-    } catch (e) {
-      alert(e.message);
-    }
+  const [buffer, setBuffer] = useState();
+  const getBuffer = async (url = "") => {
+    const buffer = await fetchBufferUrl(url);
+    setBuffer(buffer);
+    return buffer;
   };
   useEffect(() => {
-    defaultUrl && getUrl(defaultUrl);
+    defaultUrl && getBuffer(defaultUrl);
   });
-  return [url, getUrl, setUrl];
+  return [buffer, getBuffer, setBuffer];
 };

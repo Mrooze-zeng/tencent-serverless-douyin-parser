@@ -34,8 +34,7 @@ export const fetchBufferUrl = async (url = "") => {
   }
   const buffer = await response.blob();
   if (buffer.type === "application/octet-stream") {
-    const videoBuffer = new Blob([buffer], { type: "video/mp4" });
-    return buffer && URL.createObjectURL(videoBuffer);
+    return new Blob([buffer], { type: "video/mp4" });
   } else {
     const text = await buffer.text();
     const res = JSON.parse(text);

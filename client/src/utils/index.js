@@ -35,7 +35,9 @@ export const copyTextToClipboard = (text = "") => {
   });
 };
 
-export const downloadUrl = (url = "") => {
+export const downloadUrl = (buffer) => {
+  console.log(buffer);
+  const url = URL.createObjectURL(buffer);
   const randomFilename = Math.random().toString(36).slice(2);
   const a = document.createElement("a");
   a.style.display = "none";
