@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { fetchBufferUrl, parserText } from "../requests";
 export const useGetVideos = (defaultText = "") => {
   const [videos, setVideos] = useState([]);
+  const [size, setSize] = useState(0);
   const getVideos = async (text = "") => {
     try {
-      const addresses = await parserText(text);
-      setVideos([...addresses]);
+      const { videos = [], size = 0 } = await parserText(text);
+      setVideos([...videos]);
+      setSize(size);
     } catch (e) {
       alert(e.message);
     }
@@ -13,7 +15,7 @@ export const useGetVideos = (defaultText = "") => {
   useEffect(() => {
     defaultText && getVideos(defaultText);
   });
-  return [videos, getVideos, setVideos];
+  return [videos, size, getVideos, setVideos];
 };
 
 export const useFetchBufferUrl = (defaultUrl = "") => {

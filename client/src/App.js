@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useFetchBufferUrl, useGetVideos } from "./hooks";
 import { copyTextToClipboard, downloadUrl } from "./utils";
 
 const App = () => {
   const [modalShow, setModalShow] = useState(false);
-  const [videos, getVideos, setVideos] = useGetVideos("");
+  const [videos, size, getVideos, setVideos] = useGetVideos("");
   const [buffer, getBuffer, setBuffer] = useFetchBufferUrl("");
+  const [isOverSize, setIsOverSize] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setModalShow(true);
@@ -35,6 +36,16 @@ const App = () => {
     }
     setModalShow(false);
   };
+  const handleTextChange = (e) => {
+    const urlRegex = /https:\/\/v\.douyin\.com\/[a-z0-9]+/gi;
+    if (urlRegex.test(e.target.value) && videos.length) {
+      setVideos([]);
+    }
+  };
+
+  useEffect(() => {
+    setIsOverSize(size / 1024 / 1024 >= 6);
+  }, [size]);
   return (
     <>
       <div className="container">
@@ -53,6 +64,7 @@ const App = () => {
               cols="15"
               rows="5"
               required
+              onChange={handleTextChange}
             ></Form.Control>
           </Form.Group>
           <Form.Group className="text-end">
@@ -96,17 +108,24 @@ const App = () => {
                 >
                   链接 {index + 1}
                 </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handleDownload(address)}
-                >
-                  远程下载
-                </Button>
+                {!isOverSize && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => handleDownload(address)}
+                  >
+                    远程下载
+                  </Button>
+                )}
               </div>
             );
           })}
       </div>
+      {videos.length > 0 && (
+        <div className="container">
+          点击链接复制链接到新窗口打开可以下载当前视频
+        </div>
+      )}
       <footer className="position-absolute bottom-0 text-center w-100 mb-1">
         <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer">
           ICP主体备案号:粤ICP备17043808号

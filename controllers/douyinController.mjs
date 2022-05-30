@@ -13,7 +13,7 @@ export default class DouyinController extends BaseController {
     this._getVideoId = this._getVideoId.bind(this);
   }
   _getUrlFromText(text = "") {
-    const regex = /https:\/\/v\.douyin\.com\/[a-z0-9]+\//gi;
+    const regex = /https:\/\/v\.douyin\.com\/[a-z0-9]+/gi;
     const url = text?.match(regex) && text?.match(regex)[0];
     if (url) {
       return url;
