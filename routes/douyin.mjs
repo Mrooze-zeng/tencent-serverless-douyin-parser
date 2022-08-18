@@ -10,6 +10,13 @@ export const douyinRouter = () => {
         middlewares: [],
       },
     ],
+    "/parser2": [
+      {
+        type: "POST",
+        handler: douyinController.parse2,
+        middlewares: [],
+      },
+    ],
     "/download": [{ type: "POST", handler: douyinController.download }],
     "/log": [
       {
