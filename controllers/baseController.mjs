@@ -9,23 +9,21 @@ export default class BaseController {
   async read(name = "") {
     await this.db.read();
     this.db.data ||= {};
-    if (this.db.data[name]) {
-      return this.db.data[name];
-    }
-    throw new Error(`${name} can't be found.`);
+    return this.db.data[name];
   }
   async save(name = "", data = {}) {
     await this.db.read();
     this.db.data ||= {};
     let current = this.db.data[name] || [];
     current.push(data);
-    this.db.data[name] = current;
+    console.log(Array.from(new Set(current)));
+    this.db.data[name] = Array.from(new Set(current));
     await this.db.write();
   }
-  async checkExists(name = "", id = "") {
+  async saveAll(name = "", data = []) {
     await this.db.read();
     this.db.data ||= {};
-    let current = this.db.data[name] || [];
-    let c = current.find((c) => c.id === id);
+    this.db.data[name] = Array.from(new Set(data));
+    await this.db.write();
   }
 }
