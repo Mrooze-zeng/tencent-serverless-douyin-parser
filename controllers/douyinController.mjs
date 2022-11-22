@@ -1,7 +1,7 @@
 import fetch, { Headers } from "node-fetch";
 import BaseController from "./baseController.mjs";
 
-export class DouyinController extends BaseController {
+export default class DouyinController extends BaseController {
   constructor(options = {}) {
     super(options);
     this.collection_name = "video_logs";

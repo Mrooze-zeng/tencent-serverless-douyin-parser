@@ -1,2 +1,3 @@
-export { DouyinController } from "./douyinController.mjs";
-export { MenstrualPeriodController } from "./memstrualPeriodController.mjs";
+import DouyinController from "./douyinController.mjs";
+
+export { DouyinController };

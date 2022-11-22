@@ -6,7 +6,6 @@ inputs:
     exclude:
       - .env
       - client
-      - huihui
   faas:
     framework: express
     name: "${name}"
