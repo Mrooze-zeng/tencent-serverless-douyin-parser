@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 
 export { douyinRouter } from "./douyin.mjs";
+export { logRouter } from "./log.mjs";
 export default class Router {
   constructor(
     prefix = "/",

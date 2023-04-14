@@ -2,7 +2,7 @@ import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import Router, { douyinRouter } from "./routes/index.mjs";
+import Router, { douyinRouter, logRouter } from "./routes/index.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/api", new Router("/douyin", douyinRouter));
+app.use("/api", new Router("/log", logRouter));
 
 app.get("/verison", (req, res) => {
   res.send({
