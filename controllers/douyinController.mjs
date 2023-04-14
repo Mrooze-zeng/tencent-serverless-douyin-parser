@@ -96,19 +96,16 @@ export default class DouyinController extends BaseController {
       // const videoId = await this._getVideoId(url);
       // const videoInfo = await this._getVideoInfo(this.api1, videoId);
       const aweme_detail = videoInfo?.aweme_list[0] || {};
-      const images = aweme_detail?.images;
-      const videos = aweme_detail?.video?.play_addr?.url_list;
-      const parserImage =
-        images &&
-        images.map((i) => {
-          return i.url_list[0];
-        });
-      const video =
-        videos &&
-        videos.map((v) => {
-          console.log(v);
-          return v.replace("playwm", "play");
-        });
+      const images = aweme_detail?.images || [];
+      const videos = aweme_detail?.video?.play_addr?.url_list || [];
+      let bestImage = [];
+      let height = 0;
+      images.forEach((image) => {
+        if (image.height > height) {
+          height = image.height;
+          bestImage = image?.url_list;
+        }
+      });
       await this.save(this.collection_name, {
         id,
         ip,
@@ -119,7 +116,7 @@ export default class DouyinController extends BaseController {
       res.send({
         type: "success",
         message: {
-          media: parserImage || video,
+          media: bestImage || video[0],
         },
       });
     } catch (e) {
