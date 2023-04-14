@@ -99,12 +99,8 @@ export default class DouyinController extends BaseController {
       const images = aweme_detail?.images || [];
       const videos = aweme_detail?.video?.play_addr?.url_list || [];
       let bestImage = [];
-      let height = 0;
       images.forEach((image) => {
-        if (image.height > height) {
-          height = image.height;
-          bestImage = image?.url_list;
-        }
+        bestImage.push(image?.url_list[0]);
       });
       await this.save(this.collection_name, {
         id,
@@ -116,7 +112,7 @@ export default class DouyinController extends BaseController {
       res.send({
         type: "success",
         message: {
-          media: bestImage || video[0],
+          media: bestImage || videos[0],
         },
       });
     } catch (e) {

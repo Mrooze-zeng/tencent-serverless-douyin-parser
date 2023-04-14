@@ -21,9 +21,19 @@ export const parserText = async (text = "") => {
   }
   const data = await response.json();
   if (data.type === "success") {
+    let dataSize =
+      data.message?.aweme_list[0]?.video?.play_addr?.data_size || 0;
+    let images = data.message?.aweme_list[0]?.images || [];
+    let outputImages = [];
+    images.forEach((image) => {
+      outputImages.push(image?.url_list[0]);
+    });
     return {
-      videos: data.message?.aweme_list[0]?.video?.play_addr?.url_list || [],
-      size: data.message?.aweme_list[0]?.video?.play_addr?.data_size,
+      videos:
+        (dataSize
+          ? data.message?.aweme_list[0]?.video?.play_addr?.url_list
+          : outputImages) || [],
+      size: dataSize,
     };
   } else {
     throw Error(data.message);
