@@ -50,6 +50,12 @@ export default class DouyinController extends BaseController {
     const json = await response.json();
     return json || {};
   }
+  async _getVideoInfo2(videoUrl = "") {
+    const url = `https://api.douyin.wtf/douyin_video_data/?douyin_video_url=${videoUrl}`;
+    const response = await this._commonFetch(url);
+    const json = await response.json();
+    return json || {};
+  }
   async parse(req, res) {
     const { text } = { ...req.query, ...req.body };
     try {
@@ -57,8 +63,9 @@ export default class DouyinController extends BaseController {
       const userAgent = req.headers["user-agent"];
       const id = req.headers["visitor-id"];
       const url = this._getUrlFromText(text);
-      const videoId = await this._getVideoId(url);
-      const videoInfo = await this._getVideoInfo(this.api2, videoId);
+      const videoInfo = await this._getVideoInfo2(url);
+      // const videoId = await this._getVideoId(url);
+      // const videoInfo = await this._getVideoInfo(this.api2, videoId);
       await this.save(this.collection_name, {
         id,
         ip,
@@ -84,9 +91,11 @@ export default class DouyinController extends BaseController {
       const userAgent = req.headers["user-agent"];
       const id = req.headers["visitor-id"];
       const url = this._getUrlFromText(text);
-      const videoId = await this._getVideoId(url);
-      const videoInfo = await this._getVideoInfo(this.api1, videoId);
-      const aweme_detail = videoInfo?.item_list[0] || {};
+      const videoInfo = await this._getVideoInfo2(url);
+      console.log(videoInfo);
+      // const videoId = await this._getVideoId(url);
+      // const videoInfo = await this._getVideoInfo(this.api1, videoId);
+      const aweme_detail = videoInfo?.aweme_list[0] || {};
       const images = aweme_detail?.images;
       const videos = aweme_detail?.video?.play_addr?.url_list;
       const parserImage =

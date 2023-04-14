@@ -22,8 +22,8 @@ export const parserText = async (text = "") => {
   const data = await response.json();
   if (data.type === "success") {
     return {
-      videos: data.message?.aweme_detail?.video?.play_addr?.url_list || [],
-      size: data.message?.aweme_detail?.video?.play_addr?.data_size,
+      videos: data.message?.aweme_list[0]?.video?.play_addr?.url_list || [],
+      size: data.message?.aweme_list[0]?.video?.play_addr?.data_size,
     };
   } else {
     throw Error(data.message);
